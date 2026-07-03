@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>jvcByte — Warm</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --cream: #f5f0e8;
+      --dark: #2c2416;
+      --brown: #8b6914;
+      --warm: #d4a853;
+      --mid: #7a6b52;
+      --border: #e0d8c8;
+      --white: #fff;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Georgia', serif; background: var(--cream); color: var(--dark); }
+
+    /* NAV */
+    nav { background: var(--cream); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 20px 48px; position: sticky; top: 0; z-index: 100; }
+    .nav-logo { font-size: 1.2rem; letter-spacing: 0.15em; text-transform: uppercase; text-decoration: none; color: var(--dark); font-weight: 700; }
+    .nav-links { display: flex; gap: 28px; }
+    .nav-links a { text-decoration: none; color: var(--mid); font-size: 0.78rem; letter-spacing: 0.08em; font-family: 'Helvetica Neue', sans-serif; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--dark); }
+    .nav-right { display: flex; gap: 16px; align-items: center; }
+    .nav-right a { text-decoration: none; color: var(--mid); font-size: 0.78rem; font-family: 'Helvetica Neue', sans-serif; transition: color 0.2s; }
+    .nav-right a:hover { color: var(--dark); }
+
+    /* HERO — full width editorial */
+    .hero { position: relative; height: 90vh; overflow: hidden; }
+    .hero img { width: 100%; height: 100%; object-fit: cover; }
+    .hero-overlay { position: absolute; inset: 0; background: linear-gradient(to right, rgba(44,36,22,0.6) 0%, transparent 60%); }
+    .hero-content { position: absolute; top: 50%; left: 10%; transform: translateY(-50%); }
+    .hero-eyebrow { font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--warm); font-family: 'Helvetica Neue', sans-serif; margin-bottom: 16px; }
+    .hero h1 { font-size: clamp(3rem, 6vw, 6rem); color: var(--white); font-weight: 400; line-height: 1; }
+    .hero-sub { color: rgba(255,255,255,0.75); font-size: 1rem; margin-top: 20px; max-width: 380px; line-height: 1.6; font-family: 'Helvetica Neue', sans-serif; }
+    .hero-btns { margin-top: 32px; display: flex; gap: 12px; flex-wrap: wrap; }
+    .btn-warm { display: inline-block; padding: 13px 36px; background: var(--warm); color: var(--dark); text-decoration: none; font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase; font-family: 'Helvetica Neue', sans-serif; font-weight: 600; transition: background 0.2s; }
+    .btn-warm:hover { background: #c49740; }
+    .btn-ghost { display: inline-block; padding: 13px 36px; border: 1px solid rgba(255,255,255,0.6); color: var(--white); text-decoration: none; font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase; font-family: 'Helvetica Neue', sans-serif; transition: background 0.2s; }
+    .btn-ghost:hover { background: rgba(255,255,255,0.1); }
+
+    /* PROMISE ROW */
+    .promise { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); background: var(--white); }
+    .promise-item { padding: 28px 24px; text-align: center; border-right: 1px solid var(--border); }
+    .promise-item:last-child { border-right: none; }
+    .promise-icon { font-size: 1.4rem; margin-bottom: 8px; }
+    .promise-title { font-size: 0.78rem; font-weight: 700; font-family: 'Helvetica Neue', sans-serif; letter-spacing: 0.05em; margin-bottom: 4px; }
+    .promise-desc { font-size: 0.72rem; color: var(--mid); font-family: 'Helvetica Neue', sans-serif; }
+
+    /* COLLECTIONS */
+    .section { padding: 80px 48px; }
+    .section-label { font-size: 0.65rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--mid); font-family: 'Helvetica Neue', sans-serif; margin-bottom: 12px; }
+    .section h2 { font-size: clamp(1.8rem, 3vw, 2.8rem); font-weight: 400; margin-bottom: 40px; }
+    .coll-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .coll-card { position: relative; overflow: hidden; cursor: pointer; }
+    .coll-card img { width: 100%; aspect-ratio: 3/4; object-fit: cover; transition: transform 0.6s; display: block; }
+    .coll-card:hover img { transform: scale(1.04); }
+    .coll-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(44,36,22,0.7) 0%, transparent 50%); }
+    .coll-info { position: absolute; bottom: 0; left: 0; right: 0; padding: 28px; }
+    .coll-info h3 { color: var(--white); font-size: 1.3rem; font-weight: 400; }
+    .coll-info a { display: inline-block; margin-top: 8px; font-size: 0.68rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--warm); font-family: 'Helvetica Neue', sans-serif; text-decoration: none; border-bottom: 1px solid var(--warm); padding-bottom: 1px; }
+
+    /* PRODUCTS */
+    .products-section { padding: 0 48px 80px; }
+    .products-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 32px; }
+    .products-header h2 { font-size: 1.5rem; font-weight: 400; }
+    .products-header a { font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--mid); text-decoration: none; font-family: 'Helvetica Neue', sans-serif; border-bottom: 1px solid var(--mid); }
+    .prod-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+    .prod-card { cursor: pointer; }
+    .prod-img { position: relative; overflow: hidden; aspect-ratio: 3/4; background: #e8e0d0; margin-bottom: 14px; }
+    .prod-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+    .prod-card:hover .prod-img img { transform: scale(1.05); }
+    .prod-tag { position: absolute; top: 10px; right: 10px; background: var(--warm); color: var(--dark); font-size: 0.6rem; letter-spacing: 0.08em; text-transform: uppercase; padding: 3px 8px; font-family: 'Helvetica Neue', sans-serif; font-weight: 600; }
+    .prod-name { font-size: 0.9rem; margin-bottom: 4px; }
+    .prod-price { font-size: 0.82rem; color: var(--mid); font-family: 'Helvetica Neue', sans-serif; }
+
+    /* NEWSLETTER */
+    .newsletter { background: var(--dark); padding: 80px 48px; text-align: center; }
+    .newsletter p.eyebrow { font-size: 0.65rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--warm); font-family: 'Helvetica Neue', sans-serif; margin-bottom: 16px; }
+    .newsletter h2 { font-size: clamp(1.8rem, 3vw, 3rem); color: var(--white); font-weight: 400; margin-bottom: 12px; }
+    .newsletter p.sub { color: rgba(255,255,255,0.5); font-size: 0.88rem; font-family: 'Helvetica Neue', sans-serif; margin-bottom: 32px; }
+    .email-form { display: flex; max-width: 440px; margin: 0 auto; }
+    .email-form input { flex: 1; padding: 14px 20px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); color: var(--white); font-size: 0.85rem; font-family: 'Helvetica Neue', sans-serif; outline: none; }
+    .email-form input::placeholder { color: rgba(255,255,255,0.3); }
+    .email-form button { padding: 14px 28px; background: var(--warm); color: var(--dark); border: none; font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; font-family: 'Helvetica Neue', sans-serif; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+    .email-form button:hover { background: #c49740; }
+
+    /* INSTAGRAM */
+    .instagram { padding: 72px 48px; }
+    .insta-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 28px; }
+    .insta-header h2 { font-size: 1.4rem; font-weight: 400; }
+    .insta-header a { font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--mid); text-decoration: none; font-family: 'Helvetica Neue', sans-serif; }
+    .insta-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+    .insta-item { aspect-ratio: 1; overflow: hidden; }
+    .insta-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s; cursor: pointer; }
+    .insta-item:hover img { transform: scale(1.06); }
+
+    /* FOOTER */
+    footer { background: var(--dark); color: rgba(255,255,255,0.7); padding: 64px 48px 32px; }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 48px; }
+    .footer-logo { font-size: 1.1rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--white); margin-bottom: 16px; }
+    .footer-about p { font-size: 0.82rem; line-height: 1.7; font-family: 'Helvetica Neue', sans-serif; max-width: 260px; }
+    .footer-col h4 { font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--warm); font-family: 'Helvetica Neue', sans-serif; margin-bottom: 18px; }
+    .footer-col a { display: block; font-size: 0.82rem; color: rgba(255,255,255,0.55); text-decoration: none; font-family: 'Helvetica Neue', sans-serif; margin-bottom: 10px; transition: color 0.15s; }
+    .footer-col a:hover { color: var(--white); }
+    .footer-bottom { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 24px; display: flex; justify-content: space-between; font-size: 0.72rem; font-family: 'Helvetica Neue', sans-serif; color: rgba(255,255,255,0.3); }
+
+    @media (max-width: 900px) {
+      nav { padding: 16px 24px; }
+      .nav-links { display: none; }
+      .hero-content { left: 5%; right: 5%; }
+      .section, .products-section, .instagram { padding-left: 24px; padding-right: 24px; }
+      .promise { grid-template-columns: repeat(2, 1fr); }
+      .coll-grid { grid-template-columns: 1fr; }
+      .prod-grid { grid-template-columns: repeat(2, 1fr); }
+      .insta-grid { grid-template-columns: repeat(3, 1fr); }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="nav-logo">jvcByte</a>
+    <div class="nav-links">
+      <a href="category.html">New Arrivals</a>
+      <a href="category.html">Women</a>
+      <a href="category.html">Men</a>
+      <a href="category.html">Collections</a>
+      <a href="about.html">Our Story</a>
+    </div>
+    <div class="nav-right">
+      <a href="#">Search</a>
+      <a href="#">Wishlist</a>
+      <a href="cart.html">Cart</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <img src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=1600&q=80" alt="Hero">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <p class="hero-eyebrow">Autumn / Winter 2025</p>
+      <h1>Warm<br>Stories.</h1>
+      <p class="hero-sub">Rich textures, earthy tones, and silhouettes built to last the season — and beyond.</p>
+      <div class="hero-btns">
+        <a href="category.html" class="btn-warm">Shop Collection</a>
+        <a href="about.html" class="btn-ghost">Our Story</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROMISE -->
+  <div class="promise">
+    <div class="promise-item">
+      <div class="promise-icon">✦</div>
+      <p class="promise-title">Free Shipping</p>
+      <p class="promise-desc">On all orders over $100</p>
+    </div>
+    <div class="promise-item">
+      <div class="promise-icon">↩</div>
+      <p class="promise-title">Easy Returns</p>
+      <p class="promise-desc">30 day return window</p>
+    </div>
+    <div class="promise-item">
+      <div class="promise-icon">◇</div>
+      <p class="promise-title">Responsibly Made</p>
+      <p class="promise-desc">Ethical supply chain</p>
+    </div>
+    <div class="promise-item">
+      <div class="promise-icon">✿</div>
+      <p class="promise-title">Natural Fabrics</p>
+      <p class="promise-desc">Linen, wool & silk</p>
+    </div>
+  </div>
+
+  <!-- COLLECTIONS -->
+  <section class="section">
+    <p class="section-label">Explore</p>
+    <h2>Shop by Category</h2>
+    <div class="coll-grid">
+      <div class="coll-card">
+        <img src="https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=700&q=80" alt="Women">
+        <div class="coll-overlay"></div>
+        <div class="coll-info">
+          <h3>Women</h3>
+          <a href="category.html">Shop Now</a>
+        </div>
+      </div>
+      <div class="coll-card">
+        <img src="https://images.unsplash.com/photo-1552902865-b72c031ac5ea?w=700&q=80" alt="Men">
+        <div class="coll-overlay"></div>
+        <div class="coll-info">
+          <h3>Men</h3>
+          <a href="category.html">Shop Now</a>
+        </div>
+      </div>
+      <div class="coll-card">
+        <img src="https://images.unsplash.com/photo-1509631179647-0177331693ae?w=700&q=80" alt="Accessories">
+        <div class="coll-overlay"></div>
+        <div class="coll-info">
+          <h3>Accessories</h3>
+          <a href="category.html">Shop Now</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRODUCTS -->
+  <section class="products-section">
+    <div class="products-header">
+      <h2>Featured Pieces</h2>
+      <a href="category.html">View All</a>
+    </div>
+    <div class="prod-grid">
+      <div class="prod-card">
+        <div class="prod-img">
+          <img src="https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=600&q=80" alt="Product">
+          <span class="prod-tag">New</span>
+        </div>
+        <p class="prod-name">Camel Wool Coat</p>
+        <p class="prod-price">$420</p>
+      </div>
+      <div class="prod-card">
+        <div class="prod-img">
+          <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&q=80" alt="Product">
+        </div>
+        <p class="prod-name">Burnt Orange Dress</p>
+        <p class="prod-price">$210</p>
+      </div>
+      <div class="prod-card">
+        <div class="prod-img">
+          <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=600&q=80" alt="Product">
+          <span class="prod-tag">New</span>
+        </div>
+        <p class="prod-name">Herringbone Trousers</p>
+        <p class="prod-price">$195</p>
+      </div>
+      <div class="prod-card">
+        <div class="prod-img">
+          <img src="https://images.unsplash.com/photo-1566206091558-7f218b696731?w=600&q=80" alt="Product">
+        </div>
+        <p class="prod-name">Merino Turtleneck</p>
+        <p class="prod-price">$145</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- NEWSLETTER -->
+  <section class="newsletter">
+    <p class="eyebrow">Stay Connected</p>
+    <h2>Get 10% Off<br>Your First Order</h2>
+    <p class="sub">Join the jvcByte community for early access, styling notes, and exclusive offers.</p>
+    <form class="email-form" onsubmit="return false">
+      <input type="email" placeholder="Your email address">
+      <button type="submit">Subscribe</button>
+    </form>
+  </section>
+
+  <!-- INSTAGRAM -->
+  <section class="instagram">
+    <div class="insta-header">
+      <h2>@jvcbyte</h2>
+      <a href="#">Follow on Instagram</a>
+    </div>
+    <div class="insta-grid">
+      <div class="insta-item"><img src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=400&q=80" alt="ig"></div>
+      <div class="insta-item"><img src="https://images.unsplash.com/photo-1487222477894-8943e31ef7b2?w=400&q=80" alt="ig"></div>
+      <div class="insta-item"><img src="https://images.unsplash.com/photo-1485230895905-ec40ba36b9bc?w=400&q=80" alt="ig"></div>
+      <div class="insta-item"><img src="https://images.unsplash.com/photo-1496217590455-aa63a8350eea?w=400&q=80" alt="ig"></div>
+      <div class="insta-item"><img src="https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=400&q=80" alt="ig"></div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-about">
+        <div class="footer-logo">jvcByte</div>
+        <p>Warm, considered fashion for the seasons that matter. Crafted from natural fibres, built to last.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Shop</h4>
+        <a href="category.html">New Arrivals</a>
+        <a href="category.html">Women</a>
+        <a href="category.html">Men</a>
+        <a href="category.html">Accessories</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="about.html">Our Story</a>
+        <a href="#">Sustainability</a>
+        <a href="contact.html">Contact</a>
+        <a href="#">Press</a>
+      </div>
+      <div class="footer-col">
+        <h4>Help</h4>
+        <a href="#">Shipping</a>
+        <a href="#">Returns</a>
+        <a href="#">Size Guide</a>
+        <a href="#">Privacy</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 jvcByte. All Rights Reserved.</p>
+      <p>Instagram · Pinterest · Twitter</p>
+    </div>
+  </footer>
+
+</body>
+</html>
