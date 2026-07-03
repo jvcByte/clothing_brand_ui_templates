@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>jvcByte — Studio</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --white: #fff; --off: #f8f6f3; --black: #111; --mid: #666; --border: #e5e5e5; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Helvetica Neue', Arial, sans-serif; background: var(--white); color: var(--black); font-size: 14px; }
+
+    /* NAV */
+    nav { position: sticky; top: 0; z-index: 100; background: var(--white); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 40px; height: 60px; }
+    .nav-logo { font-size: 0.85rem; font-weight: 700; letter-spacing: 0.25em; text-transform: uppercase; text-decoration: none; color: var(--black); }
+    .nav-center { display: flex; gap: 28px; }
+    .nav-center a { text-decoration: none; color: var(--mid); font-size: 0.75rem; letter-spacing: 0.08em; transition: color 0.15s; }
+    .nav-center a:hover { color: var(--black); }
+    .nav-right { display: flex; gap: 20px; align-items: center; }
+    .nav-right a { text-decoration: none; color: var(--mid); font-size: 0.75rem; letter-spacing: 0.08em; transition: color 0.15s; }
+    .nav-right a:hover { color: var(--black); }
+    .cart-count { background: var(--black); color: var(--white); font-size: 0.6rem; border-radius: 50%; width: 16px; height: 16px; display: inline-flex; align-items: center; justify-content: center; margin-left: 4px; }
+
+    /* HERO SPLIT */
+    .hero { display: grid; grid-template-columns: 1fr 1fr; min-height: calc(100vh - 60px); }
+    .hero-left { background: var(--off); display: flex; align-items: center; justify-content: center; padding: 80px; }
+    .hero-text .tag { font-size: 0.65rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--mid); margin-bottom: 24px; }
+    .hero-text h1 { font-size: clamp(2.8rem, 4vw, 5rem); font-weight: 300; line-height: 1.05; letter-spacing: -0.02em; }
+    .hero-text h1 em { font-style: italic; }
+    .hero-text p { margin-top: 20px; color: var(--mid); line-height: 1.7; max-width: 320px; font-size: 0.9rem; }
+    .hero-actions { margin-top: 36px; display: flex; gap: 12px; }
+    .btn-dark { display: inline-block; padding: 12px 32px; background: var(--black); color: var(--white); text-decoration: none; font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase; transition: background 0.2s; }
+    .btn-dark:hover { background: #333; }
+    .btn-outline { display: inline-block; padding: 12px 32px; border: 1px solid var(--black); color: var(--black); text-decoration: none; font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase; transition: background 0.2s, color 0.2s; }
+    .btn-outline:hover { background: var(--black); color: var(--white); }
+    .hero-right { overflow: hidden; }
+    .hero-right img { width: 100%; height: 100%; object-fit: cover; }
+
+    /* STRIP */
+    .strip { display: flex; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .strip-item { flex: 1; padding: 20px; text-align: center; border-right: 1px solid var(--border); font-size: 0.72rem; letter-spacing: 0.1em; color: var(--mid); }
+    .strip-item:last-child { border-right: none; }
+    .strip-item strong { display: block; color: var(--black); font-size: 0.75rem; margin-bottom: 2px; }
+
+    /* COLLECTIONS TABS */
+    .section { padding: 72px 40px; }
+    .section-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 32px; }
+    .section-head h2 { font-size: 1.5rem; font-weight: 400; letter-spacing: -0.01em; }
+    .tabs { display: flex; gap: 0; border-bottom: 1px solid var(--border); margin-bottom: 32px; }
+    .tab { padding: 10px 24px; font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; color: var(--mid); border-bottom: 2px solid transparent; margin-bottom: -1px; transition: color 0.15s, border-color 0.15s; }
+    .tab.active { color: var(--black); border-bottom-color: var(--black); }
+    .products-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); }
+    .product-card { background: var(--white); cursor: pointer; }
+    .product-img { overflow: hidden; aspect-ratio: 3/4; position: relative; }
+    .product-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+    .product-card:hover .product-img img { transform: scale(1.04); }
+    .product-info { padding: 16px; }
+    .product-name { font-size: 0.82rem; margin-bottom: 4px; }
+    .product-price { font-size: 0.8rem; color: var(--mid); }
+    .product-price s { margin-right: 6px; color: #bbb; }
+    .badge { position: absolute; top: 10px; left: 10px; font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 8px; background: var(--black); color: var(--white); }
+    .badge.sale { background: #c0392b; }
+
+    /* FEATURED EDITORIAL */
+    .editorial { display: grid; grid-template-columns: 1fr 1fr; background: var(--off); }
+    .editorial-img { overflow: hidden; min-height: 500px; }
+    .editorial-img img { width: 100%; height: 100%; object-fit: cover; }
+    .editorial-text { padding: 80px; display: flex; flex-direction: column; justify-content: center; }
+    .editorial-text .eyebrow { font-size: 0.65rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--mid); margin-bottom: 16px; }
+    .editorial-text h2 { font-size: clamp(1.8rem, 2.5vw, 3rem); font-weight: 300; line-height: 1.1; letter-spacing: -0.02em; }
+    .editorial-text p { margin-top: 16px; color: var(--mid); line-height: 1.7; font-size: 0.88rem; max-width: 380px; }
+    .editorial-text a { margin-top: 28px; display: inline-block; font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--black); text-decoration: none; border-bottom: 1px solid var(--black); padding-bottom: 2px; }
+
+    /* SIZE GUIDE STRIP */
+    .size-strip { padding: 48px 40px; text-align: center; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .size-strip p { font-size: 0.78rem; letter-spacing: 0.08em; color: var(--mid); }
+    .size-strip a { color: var(--black); font-weight: 500; }
+
+    /* INSTAGRAM */
+    .instagram { padding: 72px 40px; }
+    .insta-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 4px; }
+    .insta-item { aspect-ratio: 1; overflow: hidden; }
+    .insta-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s, filter 0.4s; cursor: pointer; }
+    .insta-item:hover img { transform: scale(1.06); filter: brightness(0.9); }
+
+    /* FOOTER */
+    footer { background: var(--off); border-top: 1px solid var(--border); padding: 56px 40px 28px; }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 48px; }
+    .footer-brand-name { font-size: 0.85rem; font-weight: 700; letter-spacing: 0.25em; text-transform: uppercase; margin-bottom: 14px; }
+    .footer-brand p { font-size: 0.8rem; color: var(--mid); line-height: 1.7; max-width: 260px; }
+    .footer-col h4 { font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--mid); margin-bottom: 16px; }
+    .footer-col a { display: block; font-size: 0.8rem; color: var(--black); text-decoration: none; margin-bottom: 8px; transition: color 0.15s; }
+    .footer-col a:hover { color: var(--mid); }
+    .footer-bottom { border-top: 1px solid var(--border); padding-top: 20px; display: flex; justify-content: space-between; }
+    .footer-bottom p { font-size: 0.72rem; color: var(--mid); }
+
+    @media (max-width: 900px) {
+      nav { padding: 0 20px; }
+      .nav-center { display: none; }
+      .hero { grid-template-columns: 1fr; }
+      .hero-right { height: 300px; }
+      .hero-left { padding: 48px 24px; }
+      .section { padding: 48px 20px; }
+      .products-grid { grid-template-columns: repeat(2, 1fr); }
+      .editorial { grid-template-columns: 1fr; }
+      .editorial-text { padding: 40px 24px; }
+      .insta-grid { grid-template-columns: repeat(3, 1fr); }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="nav-logo">jvcByte</a>
+    <div class="nav-center">
+      <a href="category.html">New In</a>
+      <a href="category.html">Women</a>
+      <a href="category.html">Men</a>
+      <a href="category.html">Sale</a>
+      <a href="about.html">About</a>
+    </div>
+    <div class="nav-right">
+      <a href="#">Search</a>
+      <a href="#">Wishlist</a>
+      <a href="cart.html">Bag <span class="cart-count">0</span></a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-left">
+      <div class="hero-text">
+        <p class="tag">Spring / Summer 2025</p>
+        <h1>Form<br>Meets <em>Function</em></h1>
+        <p>Timeless pieces designed around your life — not the other way around.</p>
+        <div class="hero-actions">
+          <a href="category.html" class="btn-dark">Shop Women</a>
+          <a href="category.html" class="btn-outline">Shop Men</a>
+        </div>
+      </div>
+    </div>
+    <div class="hero-right">
+      <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?w=900&q=80" alt="Hero">
+    </div>
+  </section>
+
+  <!-- STRIP -->
+  <div class="strip">
+    <div class="strip-item"><strong>Free Shipping</strong>On orders over $120</div>
+    <div class="strip-item"><strong>Easy Returns</strong>Within 30 days</div>
+    <div class="strip-item"><strong>Sustainable</strong>Ethically sourced</div>
+    <div class="strip-item"><strong>Size Inclusive</strong>XS — 3XL</div>
+  </div>
+
+  <!-- PRODUCTS -->
+  <section class="section">
+    <div class="section-head">
+      <h2>New Arrivals</h2>
+      <a href="category.html" class="btn-outline" style="font-size:0.68rem;padding:8px 20px;">View All</a>
+    </div>
+    <div class="tabs">
+      <div class="tab active">All</div>
+      <div class="tab">Women</div>
+      <div class="tab">Men</div>
+      <div class="tab">Accessories</div>
+    </div>
+    <div class="products-grid">
+      <div class="product-card">
+        <div class="product-img">
+          <img src="https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=600&q=80" alt="Product">
+          <span class="badge">New</span>
+        </div>
+        <div class="product-info">
+          <p class="product-name">Linen Blazer</p>
+          <p class="product-price">$245</p>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="product-img">
+          <img src="https://images.unsplash.com/photo-1495385794356-15371f348c31?w=600&q=80" alt="Product">
+          <span class="badge sale">Sale</span>
+        </div>
+        <div class="product-info">
+          <p class="product-name">Wide Leg Trousers</p>
+          <p class="product-price"><s>$165</s>$110</p>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="product-img">
+          <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=600&q=80" alt="Product">
+        </div>
+        <div class="product-info">
+          <p class="product-name">Cotton Midi Dress</p>
+          <p class="product-price">$185</p>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="product-img">
+          <img src="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=600&q=80" alt="Product">
+          <span class="badge">New</span>
+        </div>
+        <div class="product-info">
+          <p class="product-name">Cashmere Crewneck</p>
+          <p class="product-price">$310</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EDITORIAL -->
+  <section class="editorial">
+    <div class="editorial-img">
+      <img src="https://images.unsplash.com/photo-1445205170230-053b83016050?w=900&q=80" alt="Editorial">
+    </div>
+    <div class="editorial-text">
+      <p class="eyebrow">The Edit — June 2025</p>
+      <h2>Less noise.<br>More intention.</h2>
+      <p>We believe a wardrobe should work as hard as you do. Our summer edit is built around 12 versatile pieces that take you from morning to evening, Monday to Sunday.</p>
+      <a href="category.html">Shop the Edit</a>
+    </div>
+  </section>
+
+  <!-- SIZE STRIP -->
+  <div class="size-strip">
+    <p>Not sure about sizing? <a href="#">View our full size guide →</a></p>
+  </div>
+
+  <!-- INSTAGRAM -->
+  <section class="instagram">
+    <div class="section-head">
+      <h2>@jvcbyte</h2>
+      <a href="#" style="font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;color:#666;text-decoration:none;border-bottom:1px solid #666;padding-bottom:2px;">Follow</a>
+    </div>
+    <div class="insta-grid">
+      <div class="insta-item"><img src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=400&q=80" alt="ig"></div>
+      <div class="insta-item"><img src="https://images.unsplash.com/photo-1487222477894-8943e31ef7b2?w=400&q=80" alt="ig"></div>
+      <div class="insta-item"><img src="https://images.unsplash.com/photo-1485230895905-ec40ba36b9bc?w=400&q=80" alt="ig"></div>
+      <div class="insta-item"><img src="https://images.unsplash.com/photo-1509631179647-0177331693ae?w=400&q=80" alt="ig"></div>
+      <div class="insta-item"><img src="https://images.unsplash.com/photo-1496217590455-aa63a8350eea?w=400&q=80" alt="ig"></div>
+      <div class="insta-item"><img src="https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=400&q=80" alt="ig"></div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-brand-name">jvcByte</div>
+        <p>Considered clothing for everyday life. We make less, but better.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Shop</h4>
+        <a href="category.html">New In</a>
+        <a href="category.html">Women</a>
+        <a href="category.html">Men</a>
+        <a href="category.html">Sale</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="about.html">About</a>
+        <a href="#">Sustainability</a>
+        <a href="contact.html">Contact</a>
+        <a href="#">Press</a>
+      </div>
+      <div class="footer-col">
+        <h4>Support</h4>
+        <a href="#">Shipping</a>
+        <a href="#">Returns</a>
+        <a href="#">Size Guide</a>
+        <a href="#">FAQ</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 jvcByte</p>
+      <p>Instagram · Twitter · Pinterest</p>
+    </div>
+  </footer>
+
+</body>
+</html>
